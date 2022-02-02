@@ -17,6 +17,7 @@ class Utils {
 		$diffTitle = Title::newFromText(
 			'Special:Diff/' . $rc->getAttribute( 'rc_this_oldid' )
 		);
+        $diffUrl = $diffTitle->getFullURL();
 
 		// Parse section links
 		$parsed = preg_replace_callback(
@@ -24,11 +25,8 @@ class Utils {
 			static function ( $matches ) use ( $diffTitle ) {
 				$sectionName = $matches[1] . ( empty( $matches[2] ) ? ': ' : '' );
 				$sectionFragment = preg_replace( '/\s+/', '_', $sectionName );
-				$sectionTitle = Title::newFromText( $diffTitle->getFullText() );
-				$sectionTitle->setFragment( '#' . $sectionFragment );
-				$sectionUrl = $sectionTitle->getFullURL();
 
-				return "[\u2192$sectionName]($sectionUrl)";
+				return "[\u2192$sectionName]($diffUrl#$sectionFragment)";
 			},
 			$parsed
 		);

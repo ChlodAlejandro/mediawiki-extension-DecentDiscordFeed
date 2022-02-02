@@ -31,7 +31,7 @@ class WebhookPayload {
 
 		$page = $rc->getPage()->getDBkey() ?? $rc->getAttribute( 'rc_title' );
 		$title = Title::newFromText( $page );
-		$titleString = $title->getFullText();
+		$titleString = $title->getPrefixedText();
 		$titleUrl = $title->getFullUrl();
 		$comment = empty( $rc->getAttribute( 'rc_comment_text' ) )
 			? $rc->mExtra[ 'actionComment' ] ?? ''
