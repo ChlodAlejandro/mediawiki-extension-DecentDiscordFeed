@@ -54,11 +54,11 @@ class Utils {
 	 */
 	public static function getUserLinkMarkdown( string $username ): string {
 		$linkUserpage = Title::newFromText( $username, NS_USER )
-			->getLinkURL();
+			->getFullUrl();
 		$linkTalkpage = Title::newFromText( $username, NS_USER_TALK )
-			->getLinkURL();
+			->getFullUrl();
 		$linkContributions = Title::newFromText( 'Special:Contributions/' . $username )
-			->getLinkURL();
+			->getFullUrl();
 
 		return "[$username]($linkUserpage) ([talk]($linkTalkpage) | [contribs]($linkContributions))";
 	}

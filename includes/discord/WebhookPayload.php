@@ -32,7 +32,7 @@ class WebhookPayload {
 		$page = $rc->getPage()->getDBkey() ?? $rc->getAttribute( 'rc_title' );
 		$title = Title::newFromText( $page );
 		$titleString = $title->getFullText();
-		$titleUrl = $title->getLinkURL();
+		$titleUrl = $title->getFullUrl();
 		$comment = empty( $rc->getAttribute( 'rc_comment_text' ) )
 			? $rc->mExtra[ 'actionComment' ] ?? ''
 			: $rc->getAttribute( 'rc_comment_text' );
@@ -41,7 +41,7 @@ class WebhookPayload {
 			$id = $rc->getAttribute( 'rc_logid' );
 			$logType = $rc->getAttribute( 'rc_log_type' );
 			$logAction = $rc->getAttribute( 'rc_log_action' );
-			$logUrl = Title::newFromText( "Special:Redirect/logid/$id" )->getLinkURL();
+			$logUrl = Title::newFromText( "Special:Redirect/logid/$id" )->getFullUrl();
 
 			$embed
 				->setColor( $config->get( 'DecentDiscordFeedLogColor' ) )
@@ -98,8 +98,8 @@ class WebhookPayload {
 		) {
 			$newId = $rc->getAttribute( 'rc_this_oldid' );
 			$oldId = $rc->getAttribute( 'rc_this_oldid' );
-			$diffUrl = Title::newFromText( "Special:Diff/$newId/$oldId" )->getLinkURL();
-			$histUrl = Title::newFromText( "Special:PageHistory/$title" )->getLinkURL();
+			$diffUrl = Title::newFromText( "Special:Diff/$newId/$oldId" )->getFullUrl();
+			$histUrl = Title::newFromText( "Special:PageHistory/$title" )->getFullUrl();
 
 			$byteDiff = ( $rc->getAttribute( 'rc_new_len' ) ?? 0 )
 				- ( $rc->getAttribute( 'rc_old_len' ) ?? 0 );
