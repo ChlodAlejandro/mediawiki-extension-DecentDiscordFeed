@@ -11,52 +11,54 @@
 		"MediaWiki": ">= 1.35.0"
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\DecentDiscordFeed\\": "includes/"
+		"MediaWiki\\Extension\\DecentDiscordFeed\\": "includes/",
+        "MediaWiki\\Extension\\DecentDiscordFeed\\Discord\\": "includes/discord",
+        "MediaWiki\\Extension\\DecentDiscordFeed\\Hooks\\": "includes/hooks"
 	},
-    "MessagesDirs": {
-        "ddf": "i18n"
-    },
+	"MessagesDirs": {
+		"ddf": "i18n"
+	},
 	"config": {
 		"DecentDiscordFeedWebhook": {
 			"description": "The webhook to connect to.",
-            "value": null
+			"value": null
 		},
-        "DecentDiscordFeedLogIcon": {
-            "description": "The icon to use for log events.",
-            "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/OOjs_UI_icon_information-progressive.svg/600px-OOjs_UI_icon_information-progressive.svg.png"
-        },
-        "DecentDiscordFeedLogColor": {
-            "description": "The color to use for log events.",
-            "value": 3172045
-        },
-        "DecentDiscordFeedEditAddIcon": {
-            "description": "The icon to use for edits with added bytes.",
-            "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/MobileFrontend_bytes-added.svg/512px-MobileFrontend_bytes-added.svg.png"
-        },
-        "DecentDiscordFeedEditAddColor": {
-            "description": "The color to use for edits with added bytes.",
-            "value": 44937
-        },
-        "DecentDiscordFeedEditRemoveIcon": {
-            "description": "The icon to use for edits with removed bytes.",
-            "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/MobileFrontend_bytes-removed.svg/512px-MobileFrontend_bytes-removed.svg.png"
-        },
-        "DecentDiscordFeedEditRemoveColor": {
-            "description": "The color to use for edits with removed bytes.",
-            "value": 14496563
-        },
-        "DecentDiscordFeedEditNeutralIcon": {
-            "description": "The icon to use for edits with no change in bytes.",
-            "value": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/MobileFrontend_bytes-neutral.svg/512px-MobileFrontend_bytes-neutral.svg.png"
-        },
-        "DecentDiscordFeedEditNeutralColor": {
-            "description": "The color to use for edits with no change in bytes.",
-            "value": 7501693
-        }
+		"DecentDiscordFeedLogIcon": {
+			"description": "The icon to use for log events.",
+			"value": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/OOjs_UI_icon_information-progressive.svg/600px-OOjs_UI_icon_information-progressive.svg.png"
+		},
+		"DecentDiscordFeedLogColor": {
+			"description": "The color to use for log events.",
+			"value": 3172045
+		},
+		"DecentDiscordFeedEditAddIcon": {
+			"description": "The icon to use for edits with added bytes.",
+			"value": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/MobileFrontend_bytes-added.svg/512px-MobileFrontend_bytes-added.svg.png"
+		},
+		"DecentDiscordFeedEditAddColor": {
+			"description": "The color to use for edits with added bytes.",
+			"value": 44937
+		},
+		"DecentDiscordFeedEditRemoveIcon": {
+			"description": "The icon to use for edits with removed bytes.",
+			"value": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/MobileFrontend_bytes-removed.svg/512px-MobileFrontend_bytes-removed.svg.png"
+		},
+		"DecentDiscordFeedEditRemoveColor": {
+			"description": "The color to use for edits with removed bytes.",
+			"value": 14496563
+		},
+		"DecentDiscordFeedEditNeutralIcon": {
+			"description": "The icon to use for edits with no change in bytes.",
+			"value": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/MobileFrontend_bytes-neutral.svg/512px-MobileFrontend_bytes-neutral.svg.png"
+		},
+		"DecentDiscordFeedEditNeutralColor": {
+			"description": "The color to use for edits with no change in bytes.",
+			"value": 7501693
+		}
 	},
-    "ConfigRegistry": {
-        "decentdiscordfeed": "GlobalVarConfig::newInstance"
-    },
+	"ConfigRegistry": {
+		"decentdiscordfeed": "GlobalVarConfig::newInstance"
+	},
 	"HookHandlers": {
 		"RecentChangeHandler": {
 			"class": "MediaWiki\\Extension\\DecentDiscordFeed\\Hooks\\RecentChangeHandler"
