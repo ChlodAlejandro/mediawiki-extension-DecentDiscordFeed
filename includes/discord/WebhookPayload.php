@@ -4,7 +4,6 @@ namespace MediaWiki\Extension\DecentDiscordFeed\Discord;
 
 use MediaWiki\Extension\DecentDiscordFeed\Utils;
 use MediaWiki\MediaWikiServices;
-use MediaWiki\Page\MovePageFactory;
 use RecentChange;
 use Title;
 
@@ -20,16 +19,18 @@ class WebhookPayload {
 	 * @return \MediaWiki\Extension\DecentDiscordFeed\Discord\WebhookPayload
 	 */
 	public static function recentChangeToPayload( RecentChange $rc ): WebhookPayload {
-		file_put_contents(
-			$_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . "test.txt",
-			json_encode( $rc->getCharacterDifference() )
-		);
 		$config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'decentdiscordfeed' );
+		$namespaces = MediaWikiServices::getInstance()->getNamespaceInfo();
 
 		$payload = new WebhookPayload();
 		$embed = new Embed();
 
-		$page = $rc->getPage()->getDBkey() ?? $rc->getAttribute( 'rc_title' );
+		$namespace = $namespaces->getCanonicalName( $rc->getAttribute( 'rc_namespace' ) ) ?? null;
+		$pageTitle = $rc->getAttribute( 'rc_title' );
+		$page = ( !empty( $namespace ) && !empty( $pageTitle ) ? "$namespace:$pageTitle" : null )
+			?? $rc->mExtra[ 'prefixedDBkey' ]
+			?? $rc->getPage()->getDBkey()
+			?? $rc->getAttribute( 'rc_title' );
 		$title = Title::newFromText( $page );
 		$titleString = $title->getPrefixedText();
 		$titleUrl = $title->getFullUrl();
@@ -97,8 +98,8 @@ class WebhookPayload {
 			|| $rc->getAttribute( 'rc_type' ) === RC_NEW
 		) {
 			$newId = $rc->getAttribute( 'rc_this_oldid' );
-			$oldId = $rc->getAttribute( 'rc_this_oldid' );
-			$diffUrl = Title::newFromText( "Special:Diff/$newId/$oldId" )->getFullUrl();
+			$oldId = $rc->getAttribute( 'rc_last_oldid' );
+			$diffUrl = Title::newFromText( "Special:Diff/$oldId/$newId" )->getFullUrl();
 			$histUrl = Title::newFromText( "Special:PageHistory/$title" )->getFullUrl();
 
 			$byteDiff = ( $rc->getAttribute( 'rc_new_len' ) ?? 0 )
@@ -111,8 +112,8 @@ class WebhookPayload {
 				$diffType = "Neutral";
 			}
 			$byteDiffText = abs( $byteDiff ) > 500
-				? "**" . ( $byteDiff > 0 ? "-$byteDiff" : $byteDiff ) . "**"
-				: ( $byteDiff > 0 ? "-$byteDiff" : $byteDiff );
+				? "**" . ( $byteDiff > 0 ? "+$byteDiff" : $byteDiff ) . "**"
+				: ( $byteDiff > 0 ? "+$byteDiff" : $byteDiff );
 
 			$diffText = !empty( $oldId ) ? 'diff' : '**new**';
 
