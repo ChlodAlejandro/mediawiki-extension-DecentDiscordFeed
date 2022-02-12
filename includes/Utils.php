@@ -8,7 +8,7 @@ use Title;
 class Utils {
 
 	/**
-	 * @param \RecentChange $rc
+	 * @param RecentChange $rc
 	 * @param string $wikitext
 	 * @return string
 	 */
@@ -27,7 +27,7 @@ class Utils {
 				$sectionFragment = preg_replace( '/\s+/', '_', $sectionName );
 
 				return "[\u{2192}$sectionName]($diffUrl#$sectionFragment)"
-					. !empty( $matches[2] ) ? $matches[2] : "";
+					. ( !empty( $matches[2] ) ? $matches[2] : "" );
 			},
 			$parsed
 		);

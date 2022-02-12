@@ -117,6 +117,7 @@ class WebhookPayload {
 
 			$diffText = !empty( $oldId ) ? 'diff' : '**new**';
 
+			$markdownSummary = Utils::wikitextToMarkdown( $rc, $comment );
 			$embed
 				->setColor( $config->get( "DecentDiscordFeedEdit${diffType}Color" ) )
 				->setAuthorIconUrl( $config->get( "DecentDiscordFeedEdit${diffType}Icon" ) )
@@ -126,7 +127,7 @@ class WebhookPayload {
 					"([$diffText]($diffUrl) | [hist]($histUrl)) . . ($byteDiffText) . . "
 					. Utils::getUserLinkMarkdown( $rc->getAttribute( 'rc_user_text' ) )
 					. ( !empty( $comment ) ? " . . (*"
-						. Utils::wikitextToMarkdown( $rc, $comment )
+						. ( empty( $markdownSummary ) ? "No summary." : $markdownSummary )
 						. "*)" : '' )
 				)
 				->setFooterText( date(
