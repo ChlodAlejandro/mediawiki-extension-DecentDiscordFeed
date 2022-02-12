@@ -17,22 +17,23 @@ class Utils {
 		$diffTitle = Title::newFromText(
 			'Special:Diff/' . $rc->getAttribute( 'rc_this_oldid' )
 		);
-        $diffUrl = $diffTitle->getFullURL();
+		$diffUrl = $diffTitle->getFullURL();
 
 		// Parse section links
 		$parsed = preg_replace_callback(
 			'/\/\*\*?\s*(.+?)\s*\*\*?\/(\s*$)?/i',
-			static function ( $matches ) use ( $diffTitle ) {
-				$sectionName = $matches[1] . ( empty( $matches[2] ) ? ': ' : '' );
+			static function ( $matches ) use ( $diffUrl ) {
+				$sectionName = $matches[1] . ( ( $matches[2] == null ) ? ': ' : '' );
 				$sectionFragment = preg_replace( '/\s+/', '_', $sectionName );
 
-				return "[\u2192$sectionName]($diffUrl#$sectionFragment)";
+				return "[\u{2192}$sectionName]($diffUrl#$sectionFragment)"
+					. !empty( $matches[2] ) ? $matches[2] : "";
 			},
 			$parsed
 		);
 
 		// Parse intrawiki links
-		$parsed = preg_replace_callback(
+		return preg_replace_callback(
 			'/\[\[(.+?)(?:\|(.+?))?]]/i',
 			static function ( $matches ) {
 				$linkLabel = $matches[2] ?? $matches[1];
@@ -42,8 +43,6 @@ class Utils {
 			},
 			$parsed
 		);
-
-		return $parsed;
 	}
 
 	/**
