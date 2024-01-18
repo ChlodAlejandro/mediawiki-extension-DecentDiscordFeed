@@ -37,7 +37,7 @@ class RecentChangeHandler implements \MediaWiki\Hook\RecentChange_saveHook {
 		$hook = $config->get( 'DecentDiscordFeedWebhook' );
 
 		LoggerFactory::getInstance( 'DecentDiscordFeed' )
-			->info( "Sending to hook: $hook" );
+			->debug( "Sending to hook: $hook" );
 
 		WebhookCaller::callWebhook(
 			$hook,
