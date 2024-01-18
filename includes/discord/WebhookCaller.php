@@ -19,10 +19,11 @@
 
 namespace MediaWiki\Extension\DecentDiscordFeed\Discord;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
+use MediaWiki\Extension\DecentDiscordFeed\DiscordHttpRequestFactory;
 use MediaWiki\Logger\LoggerFactory;
+use MediaWiki\MediaWikiServices;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class WebhookCaller {
 
@@ -31,21 +32,30 @@ class WebhookCaller {
 	 * @param \MediaWiki\Extension\DecentDiscordFeed\Discord\WebhookPayload $payload
 	 */
 	public static function callWebhook( string $hook, WebhookPayload $payload ): void {
-		if ( $hook == null ) {
-			return;
-		}
-
+		$logger = LoggerFactory::getInstance( 'DecentDiscordFeed' );
 		try {
-			$client = new Client();
-			$response = $client->post( $hook, [
-				RequestOptions::JSON => $payload->toArray()
-			] );
-			$response->getStatusCode();
-		} catch ( GuzzleException $e ) {
-			LoggerFactory::getInstance( 'DecentDiscordFeed' )
-				->error( 'Error while calling Discord webhook: ' . $e->getMessage() );
-			LoggerFactory::getInstance( 'DecentDiscordFeed' )
-				->error( 'Payload: ' . json_encode( $payload->toArray() ) );
+			/** @type DiscordHttpRequestFactory $http */
+			$http = MediaWikiServices::getInstance()->get( 'DiscordHttpRequestFactory' );
+
+			if ( !$http->canMakeRequests() ) {
+				$logger->error( 'Cannot make HTTP requests.' );
+				return;
+			}
+
+			$http->post(
+				$hook,
+				[
+					'logger' => $logger,
+					'postData' => $payload->toArray()
+				]
+			);
+		} catch ( NotFoundExceptionInterface $e ) {
+			$logger->error( "Couldn't find the DiscordHttpRequestFactory service: {$e->getMessage()}" );
+		} catch ( ContainerExceptionInterface $e ) {
+			$logger->error( "Couldn't get the DiscordHttpRequestFactory service: {$e->getMessage()}" );
+		} catch ( Exception $e ) {
+			$logger->error( 'Error while calling Discord webhook: ' . $e->getMessage() );
+			$logger->error( 'Payload: ' . json_encode( $payload->toArray() ) );
 		}
 	}
 

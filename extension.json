@@ -18,6 +18,9 @@
 	"MessagesDirs": {
 		"ddf": "i18n"
 	},
+	"ServiceWiringFiles": [
+		"ServiceWiring.php"
+	],
 	"config": {
 		"DecentDiscordFeedWebhook": {
 			"description": "The webhook to connect to.",
