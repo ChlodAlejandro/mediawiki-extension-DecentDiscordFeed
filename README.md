@@ -1,5 +1,5 @@
 # DecentDiscordFeed
-No-brainer recent changes to Discord webhook extension.
+Extremely simple recent changes to Discord webhook extension
 
 Provides a decent Discord webhook feed based on stjohannson's
 [WikiBot](https://github.com/stjohann/DiscordWikiBot) embed look and feel.
