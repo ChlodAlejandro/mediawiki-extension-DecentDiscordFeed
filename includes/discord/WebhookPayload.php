@@ -136,8 +136,8 @@ class WebhookPayload {
 
 			$markdownSummary = Utils::wikitextToMarkdown( $rc, $comment );
 			$embed
-				->setColor( $config->get( "DecentDiscordFeedEdit${diffType}Color" ) )
-				->setAuthorIconUrl( $config->get( "DecentDiscordFeedEdit${diffType}Icon" ) )
+				->setColor( $config->get( "DecentDiscordFeedEdit{$diffType}Color" ) )
+				->setAuthorIconUrl( $config->get( "DecentDiscordFeedEdit{$diffType}Icon" ) )
 				->setAuthor( $titleString )
 				->setAuthorUrl( $titleUrl )
 				->setDescription(
