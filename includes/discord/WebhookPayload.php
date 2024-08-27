@@ -83,32 +83,35 @@ class WebhookPayload {
 			$rawData = $rc->parseParams();
 			$data = [];
 			foreach ( $rawData as $key => $value ) {
-				$data[ preg_replace( '/^[0-9]+:+/', '', $key ) ] = "$value";
+				$data[ preg_replace( '/^[0-9]+:+/', '', $key ) ] = is_array( $value ) ?
+					json_encode( $value ) : "$value";
 			}
 
-			if ( $logType == "move" ) {
-				$embed
-					->addField( new EmbedField( 'Target', Utils::codeBlock(
-						$data["target"]
-					), true ) )
-					->addField( new EmbedField( 'Redirect?', Utils::codeBlock(
-						$data["noredir"] == 0 ? "Yes" : "No"
-					), true ) );
-			} elseif ( Utils::isArray( $data ) && count( $data ) > 0 ) {
-				$embed
-					->addField( new EmbedField( 'Parameters', Utils::codeBlock(
-						implode( "\n", $data )
-					), true ) );
-			} elseif ( is_array( $data ) && !Utils::isArray( $data ) ) {
-				$embed
-					->addField( new EmbedField( 'Parameters', Utils::codeBlock(
-						json_encode( $data, JSON_PRETTY_PRINT )
-					), true ) );
-			} elseif ( is_string( $data ) || is_numeric( $data ) || is_bool( $data ) ) {
-				$embed
-					->addField( new EmbedField( 'Parameters', Utils::codeBlock(
-						$data
-					), true ) );
+			if ( $config->get( 'DecentDiscordFeedShowLogParameters' ) ) {
+				if ( $logType == "move" ) {
+					$embed
+						->addField( new EmbedField( 'Target', Utils::codeBlock(
+							$data["target"]
+						), true ) )
+						->addField( new EmbedField( 'Redirect?', Utils::codeBlock(
+							$data["noredir"] == 0 ? "Yes" : "No"
+						), true ) );
+				} elseif ( Utils::isArray( $data ) && count( $data ) > 0 ) {
+					$embed
+						->addField( new EmbedField( 'Parameters', Utils::codeBlock(
+							implode( "\n", $data )
+						), true ) );
+				} elseif ( is_array( $data ) && !Utils::isArray( $data ) ) {
+					$embed
+						->addField( new EmbedField( 'Parameters', Utils::codeBlock(
+							json_encode( $data, JSON_PRETTY_PRINT )
+						), true ) );
+				} elseif ( is_string( $data ) || is_numeric( $data ) || is_bool( $data ) ) {
+					$embed
+						->addField( new EmbedField( 'Parameters', Utils::codeBlock(
+							$data
+						), true ) );
+				}
 			}
 		} elseif (
 			$rc->getAttribute( 'rc_type' ) === RC_EDIT
