@@ -37,18 +37,12 @@ class WebhookPayload {
 	 */
 	public static function recentChangeToPayload( RecentChange $rc ): WebhookPayload {
 		$config = MediaWikiServices::getInstance()->getConfigFactory()->makeConfig( 'decentdiscordfeed' );
-		$namespaces = MediaWikiServices::getInstance()->getNamespaceInfo();
 
 		$payload = new WebhookPayload();
 		$embed = new Embed();
 
-		$namespace = $namespaces->getCanonicalName( $rc->getAttribute( 'rc_namespace' ) ) ?? null;
-		$pageTitle = $rc->getAttribute( 'rc_title' );
-		$page = ( !empty( $namespace ) && !empty( $pageTitle ) ? "$namespace:$pageTitle" : null )
-			?? $rc->mExtra[ 'prefixedDBkey' ]
-			?? $rc->getPage()->getDBkey()
-			?? $rc->getAttribute( 'rc_title' );
-		$title = Title::newFromText( $page );
+		$page = $rc->getPage();
+		$title = Title::newFromPageReference( $page );
 		$titleString = $title->getPrefixedText();
 		$titleUrl = $title->getFullUrl();
 		$comment = empty( $rc->getAttribute( 'rc_comment_text' ) )
