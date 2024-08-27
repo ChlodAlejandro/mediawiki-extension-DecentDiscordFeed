@@ -3,8 +3,8 @@
 	"author": [
 		"Chlod Alejandro"
 	],
-	"url": "https://redwarn.toolforge.org/wiki/DecentDiscordFeed",
-	"descriptionmsg": "ddf-desc",
+	"url": "https://www.mediawiki.org/wiki/Extension:DecentDiscordFeed",
+	"descriptionmsg": "decentdiscordfeed-desc",
 	"license-name": "GPL-2.0-or-later",
 	"type": "other",
 	"requires": {
@@ -16,7 +16,7 @@
         "MediaWiki\\Extension\\DecentDiscordFeed\\Hooks\\": "includes/hooks"
 	},
 	"MessagesDirs": {
-		"ddf": "i18n"
+		"decentdiscordfeed": "i18n"
 	},
 	"ServiceWiringFiles": [
 		"ServiceWiring.php"
